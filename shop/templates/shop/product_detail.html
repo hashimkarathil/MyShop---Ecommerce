@@ -1,0 +1,633 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}{{ product.name }} - MyShop{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* ================================
+   PRODUCT DETAIL PAGE
+================================ */
+
+.product-detail-section {
+    padding: 70px 0;
+    min-height: 80vh;
+}
+
+
+/* ================================
+   PRODUCT IMAGE CARD
+================================ */
+
+.product-image-card {
+    background: white;
+    border-radius: 30px;
+    padding: 25px;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.08);
+
+    position: relative;
+    overflow: hidden;
+
+    transition: 0.4s ease;
+}
+
+.product-image-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.13);
+}
+
+
+/* Glow behind image */
+
+.product-image-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background: rgba(80, 120, 255, 0.12);
+
+    filter: blur(60px);
+
+    top: 20%;
+    left: 30%;
+}
+
+
+/* Product image */
+
+.product-detail-image {
+    width: 100%;
+    height: 450px;
+
+    object-fit: contain;
+
+    position: relative;
+    z-index: 2;
+
+    transition:
+        transform 0.5s ease,
+        filter 0.5s ease;
+}
+
+.product-image-card:hover .product-detail-image {
+    transform: scale(1.06);
+
+    filter:
+        drop-shadow(0 20px 25px rgba(0,0,0,0.15));
+}
+
+
+/* No image */
+
+.no-product-image {
+    height: 450px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f5f6fa;
+
+    border-radius: 20px;
+
+    color: #999;
+}
+
+
+/* ================================
+   PRODUCT INFORMATION
+================================ */
+
+.product-info {
+    padding: 20px 15px;
+}
+
+.product-category {
+    display: inline-block;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    color: #557cff;
+
+    background: rgba(85,124,255,0.1);
+
+    padding: 7px 14px;
+
+    border-radius: 50px;
+
+    margin-bottom: 18px;
+}
+
+
+.product-title {
+    font-size: clamp(36px, 5vw, 58px);
+
+    font-weight: 800;
+
+    line-height: 1.05;
+
+    letter-spacing: -1.5px;
+
+    color: #111827;
+}
+
+
+.product-price {
+    font-size: 32px;
+
+    font-weight: 800;
+
+    color: #4f6fff;
+
+    margin-top: 20px;
+}
+
+
+.product-description {
+    color: #6b7280;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    margin-top: 20px;
+
+    max-width: 600px;
+}
+
+
+/* ================================
+   DIVIDER
+================================ */
+
+.product-divider {
+    border: none;
+
+    height: 1px;
+
+    background: #e5e7eb;
+
+    margin: 30px 0;
+}
+
+
+/* ================================
+   QUANTITY
+================================ */
+
+.quantity-label {
+    font-weight: 700;
+
+    display: block;
+
+    margin-bottom: 10px;
+}
+
+
+.quantity-input {
+    width: 130px;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    border: 1px solid #d9dce5;
+
+    padding: 10px 15px;
+
+    font-size: 17px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+.quantity-input:focus {
+    border-color: #557cff;
+
+    box-shadow:
+        0 0 0 4px rgba(85,124,255,0.12);
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+.product-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+
+.add-cart-btn {
+    border: none;
+
+    padding: 14px 28px;
+
+    border-radius: 50px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f7cff,
+            #8b55ff
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 10px 25px rgba(79,124,255,0.25);
+
+    transition: 0.3s ease;
+}
+
+.add-cart-btn:hover {
+    color: white;
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 15px 35px rgba(79,124,255,0.4);
+}
+
+
+.continue-btn {
+    padding: 14px 25px;
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.continue-btn:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ================================
+   LOGIN BUTTON
+================================ */
+
+.login-cart-btn {
+    padding: 14px 28px;
+
+    border-radius: 50px;
+
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f7cff,
+            #8b55ff
+        );
+
+    border: none;
+
+    color: white;
+
+    transition: 0.3s;
+}
+
+.login-cart-btn:hover {
+    color: white;
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 15px 35px rgba(79,124,255,0.35);
+}
+
+
+/* ================================
+   FEATURES
+================================ */
+
+.product-features {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 35px;
+}
+
+.feature-item {
+    background: white;
+
+    border: 1px solid #eee;
+
+    border-radius: 15px;
+
+    padding: 12px 16px;
+
+    font-size: 13px;
+
+    color: #555;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.04);
+}
+
+
+/* ================================
+   ANIMATION
+================================ */
+
+.product-info {
+    animation: slideIn 0.7s ease;
+}
+
+.product-image-card {
+    animation: fadeUp 0.7s ease;
+}
+
+@keyframes slideIn {
+
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+    .product-detail-section {
+        padding: 40px 0;
+    }
+
+    .product-detail-image {
+        height: 330px;
+    }
+
+    .no-product-image {
+        height: 330px;
+    }
+
+    .product-info {
+        padding: 35px 5px 0;
+    }
+
+    .product-title {
+        font-size: 38px;
+    }
+
+    .product-price {
+        font-size: 28px;
+    }
+
+    .product-actions {
+        flex-direction: column;
+    }
+
+    .add-cart-btn,
+    .continue-btn,
+    .login-cart-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+}
+
+</style>
+
+
+<!-- ======================================
+     PRODUCT DETAIL
+====================================== -->
+
+<section class="product-detail-section">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+
+            <!-- =================================
+                 PRODUCT IMAGE
+            ================================= -->
+
+            <div class="col-lg-6">
+
+                <div class="product-image-card">
+
+                    {% if product.image %}
+
+                        <img
+                            src="{{ product.image.url }}"
+                            class="product-detail-image"
+                            alt="{{ product.name }}"
+                        >
+
+                    {% else %}
+
+                        <div class="no-product-image">
+                            <span>
+                                No Image Available
+                            </span>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 PRODUCT INFORMATION
+            ================================= -->
+
+            <div class="col-lg-6">
+
+                <div class="product-info">
+
+
+                    <span class="product-category">
+                        PREMIUM PRODUCT
+                    </span>
+
+
+                    <h1 class="product-title">
+                        {{ product.name }}
+                    </h1>
+
+
+                    <div class="product-price">
+                        ₹{{ product.price }}
+                    </div>
+
+
+                    <p class="product-description">
+                        {{ product.description }}
+                    </p>
+
+
+                    <hr class="product-divider">
+
+
+                    <!-- =============================
+                         LOGGED IN USER
+                    ============================== -->
+
+                    {% if user.is_authenticated %}
+
+                        <form
+                            method="POST"
+                            action="{% url 'add_to_cart' product.id %}"
+                        >
+
+                            {% csrf_token %}
+
+
+                            <!-- Quantity -->
+
+                            <label class="quantity-label">
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="1"
+                                min="1"
+                                class="quantity-input"
+                            >
+
+
+                            <!-- Buttons -->
+
+                            <div class="product-actions">
+
+                                <button
+                                    type="submit"
+                                    class="add-cart-btn"
+                                >
+                                    🛒 Add to Cart
+                                </button>
+
+
+                                <a
+                                    href="{% url 'home' %}"
+                                    class="btn btn-outline-secondary continue-btn"
+                                >
+                                    ← Continue Shopping
+                                </a>
+
+                            </div>
+
+                        </form>
+
+
+                    {% else %}
+
+
+                        <!-- =============================
+                             GUEST USER
+                        ============================== -->
+
+                        <div class="product-actions">
+
+                            <a
+                                href="{% url 'login' %}?next={{ request.path }}"
+                                class="login-cart-btn"  style="text-decoration: none;"
+                            >🔐 Login to Add to Cart</a>
+
+
+                            <a
+                                href="{% url 'home' %}"
+                                class="btn btn-outline-secondary continue-btn"
+                            >
+                                ← Continue Shopping
+                            </a>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                    <!-- =============================
+                         PRODUCT FEATURES
+                    ============================== -->
+
+                    <div class="product-features">
+
+                        <div class="feature-item">
+                            🚚 Fast Delivery
+                        </div>
+
+                        <div class="feature-item">
+                            🔒 Secure Payment
+                        </div>
+
+                        <div class="feature-item">
+                            ✓ Quality Product
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

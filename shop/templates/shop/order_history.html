@@ -1,0 +1,1118 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+<style>
+
+    /* ================================
+       ORDERS PAGE
+    ================================= */
+
+    .orders-page {
+
+        min-height: 100vh;
+
+        padding: 70px 0;
+
+        background:
+            radial-gradient(
+                circle at 10% 10%,
+                rgba(60, 100, 255, 0.12),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at 90% 90%,
+                rgba(120, 70, 255, 0.10),
+                transparent 30%
+            ),
+            linear-gradient(
+                135deg,
+                #030712,
+                #071126 50%,
+                #0b1430
+            );
+
+        color: #ffffff;
+    }
+
+
+    /* ================================
+       PAGE HEADER
+    ================================= */
+
+    .orders-title {
+
+        font-size: 36px;
+
+        font-weight: 800;
+
+        color: #ffffff;
+
+        margin-bottom: 5px;
+    }
+
+
+    .orders-subtitle {
+
+        color: #8f9bb8;
+
+        font-size: 14px;
+    }
+
+
+    /* Continue Shopping */
+
+    .continue-btn {
+
+        border: none;
+
+        border-radius: 50px;
+
+        padding: 11px 22px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4d7cff,
+                #8050ff
+            );
+
+        color: #ffffff;
+
+        font-weight: 700;
+
+        text-decoration: none;
+
+        box-shadow:
+            0 10px 25px rgba(77, 124, 255, 0.22);
+
+        transition: 0.3s ease;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 8px;
+    }
+
+
+    .continue-btn:hover {
+
+        color: #ffffff;
+
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 15px 30px rgba(77, 124, 255, 0.35);
+    }
+
+
+    /* ================================
+       ORDER CARD
+    ================================= */
+
+    .order-card {
+
+        border: 1px solid rgba(120, 150, 255, 0.12);
+
+        border-radius: 20px;
+
+        overflow: hidden;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(18, 29, 60, 0.96),
+                rgba(7, 14, 32, 0.98)
+            );
+
+        box-shadow:
+            0 20px 50px rgba(0, 0, 0, 0.40);
+
+        transition:
+            transform 0.3s ease,
+            border-color 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+
+
+    .order-card:hover {
+
+        transform: translateY(-4px);
+
+        border-color: rgba(85, 124, 255, 0.30);
+
+        box-shadow:
+            0 25px 60px rgba(0, 0, 0, 0.50),
+            0 0 30px rgba(70, 110, 255, 0.06);
+    }
+
+
+    /* ================================
+       ORDER HEADER
+    ================================= */
+
+    .order-header {
+
+        background:
+            rgba(255, 255, 255, 0.025);
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+        padding: 20px 24px;
+    }
+
+
+    .order-label {
+
+        display: block;
+
+        color: #687692;
+
+        font-size: 11px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 4px;
+    }
+
+
+    .order-number {
+
+        color: #ffffff;
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        margin: 0;
+    }
+
+
+    .order-date {
+
+        color: #c3cce0;
+
+        font-size: 14px;
+
+        margin: 0;
+    }
+
+
+    /* ================================
+       STATUS BADGES
+    ================================= */
+
+    .status-badge {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        border-radius: 50px;
+
+        padding: 8px 14px;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        border: 1px solid transparent;
+    }
+
+
+    .status-paid {
+
+        color: #5ee6a8;
+
+        background: rgba(25, 190, 110, 0.10);
+
+        border-color: rgba(25, 190, 110, 0.20);
+    }
+
+
+    .status-cancelled {
+
+        color: #ff8791;
+
+        background: rgba(220, 53, 69, 0.10);
+
+        border-color: rgba(220, 53, 69, 0.20);
+    }
+
+
+    .status-pending {
+
+        color: #ffd36a;
+
+        background: rgba(255, 193, 7, 0.10);
+
+        border-color: rgba(255, 193, 7, 0.20);
+    }
+
+
+    /* ================================
+       ORDER BODY
+    ================================= */
+
+    .order-body {
+
+        padding: 24px;
+    }
+
+
+    .items-title {
+
+        color: #ffffff;
+
+        font-size: 15px;
+
+        font-weight: 700;
+
+        margin-bottom: 15px;
+    }
+
+
+    /* Order Item */
+
+    .order-item {
+
+        padding: 15px 0;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+
+    .order-item:last-child {
+
+        border-bottom: none;
+
+        padding-bottom: 0;
+    }
+
+
+    .product-name {
+
+        color: #ffffff;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+        margin-bottom: 5px;
+    }
+
+
+    .product-info {
+
+        color: #7f8ca8;
+
+        font-size: 13px;
+
+        margin: 0;
+    }
+
+
+    .item-total {
+
+        color: #ffffff;
+
+        font-size: 15px;
+
+        font-weight: 700;
+    }
+
+
+    /* ================================
+       ORDER FOOTER
+    ================================= */
+
+    .order-footer {
+
+        padding: 18px 24px;
+
+        background:
+            rgba(255, 255, 255, 0.025);
+
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+
+    .payment-info {
+
+        color: #7f8ca8;
+
+        font-size: 13px;
+    }
+
+
+    .payment-method {
+
+        color: #dce3f4;
+
+        font-weight: 700;
+
+        margin-left: 5px;
+    }
+
+
+    .total-label {
+
+        color: #7f8ca8;
+
+        font-size: 13px;
+
+        margin-right: 7px;
+    }
+
+
+    .order-total {
+
+        color: #6f95ff;
+
+        font-size: 21px;
+
+        font-weight: 800;
+    }
+
+
+    /* ================================
+       NO ORDERS
+    ================================= */
+
+    .empty-orders {
+
+        padding: 70px 25px;
+
+        text-align: center;
+
+        border-radius: 22px;
+
+        border: 1px solid rgba(120, 150, 255, 0.12);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(18, 29, 60, 0.96),
+                rgba(7, 14, 32, 0.98)
+            );
+
+        box-shadow:
+            0 25px 60px rgba(0, 0, 0, 0.40);
+    }
+
+
+    .empty-icon {
+
+        width: 80px;
+
+        height: 80px;
+
+        margin: 0 auto 20px;
+
+        border-radius: 22px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background:
+            rgba(70, 110, 255, 0.10);
+
+        border: 1px solid rgba(70, 110, 255, 0.15);
+
+        color: #6f95ff;
+
+        font-size: 35px;
+    }
+
+
+    .empty-title {
+
+        color: #ffffff;
+
+        font-size: 24px;
+
+        font-weight: 800;
+
+        margin-bottom: 8px;
+    }
+
+
+    .empty-text {
+
+        color: #7f8ca8;
+
+        font-size: 14px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .shop-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        padding: 11px 24px;
+
+        border-radius: 50px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4d7cff,
+                #8050ff
+            );
+
+        color: #ffffff;
+
+        text-decoration: none;
+
+        font-weight: 700;
+
+        transition: 0.3s ease;
+    }
+
+
+    .shop-btn:hover {
+
+        color: #ffffff;
+
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 12px 28px rgba(77, 124, 255, 0.30);
+    }
+
+
+    /* ================================
+       TABLET
+    ================================= */
+
+    @media (max-width: 768px) {
+
+        .orders-page {
+
+            padding: 45px 0;
+        }
+
+
+        .orders-title {
+
+            font-size: 30px;
+        }
+
+
+        .order-header {
+
+            padding: 18px;
+        }
+
+
+        .order-body {
+
+            padding: 20px;
+        }
+
+
+        .order-footer {
+
+            padding: 18px;
+        }
+
+    }
+
+
+    /* ================================
+       MOBILE
+    ================================= */
+
+    @media (max-width: 576px) {
+
+        .orders-page {
+
+            padding: 30px 0;
+
+        }
+
+
+        .orders-title {
+
+            font-size: 25px;
+
+        }
+
+
+        .orders-subtitle {
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* Header becomes vertical */
+
+        .page-header {
+
+            display: block !important;
+        }
+
+
+        .continue-btn {
+
+            width: 100%;
+
+            justify-content: center;
+
+            margin-top: 18px;
+
+            padding: 11px 18px;
+        }
+
+
+        .order-card {
+
+            border-radius: 17px;
+
+            margin-bottom: 18px !important;
+        }
+
+
+        .order-header {
+
+            padding: 17px;
+        }
+
+
+        .order-header .row {
+
+            gap: 15px;
+        }
+
+
+        .order-header .col-md-4 {
+
+            width: 100%;
+        }
+
+
+        .order-header .text-md-end {
+
+            text-align: left !important;
+        }
+
+
+        .order-number {
+
+            font-size: 17px;
+        }
+
+
+        .order-date {
+
+            font-size: 13px;
+        }
+
+
+        .status-badge {
+
+            font-size: 11px;
+
+            padding: 7px 12px;
+        }
+
+
+        .order-body {
+
+            padding: 18px;
+        }
+
+
+        .items-title {
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .order-item {
+
+            padding: 13px 0;
+        }
+
+
+        .product-name {
+
+            font-size: 14px;
+        }
+
+
+        .product-info {
+
+            font-size: 12px;
+        }
+
+
+        .item-total {
+
+            font-size: 14px;
+
+            margin-top: 8px;
+
+            display: block;
+
+            text-align: left;
+        }
+
+
+        .order-footer {
+
+            padding: 17px;
+        }
+
+
+        .order-footer .row {
+
+            gap: 14px;
+        }
+
+
+        .order-footer .col-md-6 {
+
+            width: 100%;
+        }
+
+
+        .order-footer .text-md-end {
+
+            text-align: left !important;
+        }
+
+
+        .total-label {
+
+            font-size: 12px;
+        }
+
+
+        .order-total {
+
+            font-size: 19px;
+        }
+
+
+        .empty-orders {
+
+            padding: 50px 20px;
+        }
+
+
+        .empty-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            font-size: 30px;
+        }
+
+
+        .empty-title {
+
+            font-size: 21px;
+        }
+
+    }
+
+
+    /* ================================
+       VERY SMALL PHONES
+    ================================= */
+
+    @media (max-width: 360px) {
+
+        .orders-page {
+
+            padding: 25px 0;
+        }
+
+
+        .orders-title {
+
+            font-size: 23px;
+        }
+
+
+        .order-header,
+        .order-body,
+        .order-footer {
+
+            padding: 15px;
+        }
+
+
+        .continue-btn {
+
+            font-size: 13px;
+
+            padding: 10px;
+        }
+
+
+        .product-name {
+
+            font-size: 13px;
+        }
+
+
+        .product-info {
+
+            font-size: 11px;
+        }
+
+
+        .order-total {
+
+            font-size: 18px;
+        }
+
+    }
+
+</style>
+
+
+<div class="orders-page">
+
+    <div class="container">
+
+
+        <!-- ================================
+             PAGE HEADER
+        ================================= -->
+
+        <div class="page-header d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2 class="orders-title">
+                    My Orders
+                </h2>
+
+                <p class="orders-subtitle mb-0">
+                    View your previous orders and payment details.
+                </p>
+
+            </div>
+
+
+            <a href="{% url 'home' %}" class="continue-btn">
+
+                <i class="bi bi-bag"></i>
+
+                Continue Shopping
+
+            </a>
+
+        </div>
+
+
+        <!-- ================================
+             ORDERS
+        ================================= -->
+
+        {% if orders %}
+
+            {% for order in orders %}
+
+
+            <div class="order-card mb-4">
+
+
+                <!-- Order Header -->
+
+                <div class="order-header">
+
+                    <div class="row align-items-center">
+
+
+                        <!-- Order Number -->
+
+                        <div class="col-md-4">
+
+                            <span class="order-label">
+                                Order
+                            </span>
+
+                            <h5 class="order-number">
+                                #{{ order.id }}
+                            </h5>
+
+                        </div>
+
+
+                        <!-- Date -->
+
+                        <div class="col-md-4">
+
+                            <span class="order-label">
+                                Ordered On
+                            </span>
+
+                            <p class="order-date">
+
+                                {{ order.ordered_at|date:"d M Y, h:i A" }}
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- Status -->
+
+                        <div class="col-md-4 text-md-end">
+
+
+                            {% if order.status == "Paid" %}
+
+                                <span class="status-badge status-paid">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    Paid
+
+                                </span>
+
+
+                            {% elif order.status == "Cancelled" %}
+
+                                <span class="status-badge status-cancelled">
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                    Cancelled
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="status-badge status-pending">
+
+                                    <i class="bi bi-clock-fill"></i>
+
+                                    {{ order.status }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================
+                     ORDER BODY
+                ================================= -->
+
+                <div class="order-body">
+
+
+                    <h6 class="items-title">
+
+                        <i class="bi bi-box-seam me-2"></i>
+
+                        Order Items
+
+                    </h6>
+
+
+                    {% for item in order.items.all %}
+
+
+                    <div class="order-item">
+
+
+                        <div class="row align-items-center">
+
+
+                            <!-- Product -->
+
+                            <div class="col-md-6">
+
+                                <div class="product-name">
+
+                                    {{ item.product.name }}
+
+                                </div>
+
+                                <p class="product-info">
+
+                                    ₹{{ item.price }}
+
+                                    ×
+
+                                    {{ item.quantity }}
+
+                                </p>
+
+                            </div>
+
+
+                            <!-- Item Total -->
+
+                            <div class="col-md-6 text-md-end">
+
+                                <strong class="item-total">
+
+                                    ₹{{ item.total_price }}
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+                <!-- ================================
+                     ORDER FOOTER
+                ================================= -->
+
+                <div class="order-footer">
+
+
+                    <div class="row align-items-center">
+
+
+                        <!-- Payment -->
+
+                        <div class="col-md-6">
+
+                            <span class="payment-info">
+
+                                <i class="bi bi-credit-card me-1"></i>
+
+                                Payment Method:
+
+                            </span>
+
+                            <span class="payment-method">
+
+                                {{ order.payment_method }}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Total -->
+
+                        <div class="col-md-6 text-md-end">
+
+                            <span class="total-label">
+
+                                Total:
+
+                            </span>
+
+                            <span class="order-total">
+
+                                ₹{{ order.total_price }}
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- ================================
+                 NO ORDERS
+            ================================= -->
+
+            <div class="empty-orders">
+
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-bag-x"></i>
+
+                </div>
+
+
+                <h3 class="empty-title">
+
+                    No Orders Yet
+
+                </h3>
+
+
+                <p class="empty-text">
+
+                    You haven't placed any orders yet.
+
+                </p>
+
+
+                <a href="{% url 'home' %}" class="shop-btn">
+
+                    <i class="bi bi-shop"></i>
+
+                    Start Shopping
+
+                </a>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+{% endblock %}

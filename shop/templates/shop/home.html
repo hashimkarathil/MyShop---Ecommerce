@@ -1,0 +1,805 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Home - My Shop{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* ================================
+   PREMIUM HERO SECTION
+================================ */
+
+.hero-section {
+    min-height: 620px;
+    /* border-radius: 0 0 35px 35px; */
+    background:
+        radial-gradient(circle at 80% 30%, rgba(80, 120, 255, 0.35), transparent 30%),
+        radial-gradient(circle at 20% 80%, rgba(160, 70, 255, 0.25), transparent 30%),
+        linear-gradient(135deg, #050816, #0b1026 50%, #111936);
+    color: white;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Animated background lights */
+
+.hero-section::before,
+.hero-section::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: floatingLight 6s ease-in-out infinite alternate;
+}
+
+.hero-section::before {
+    width: 250px;
+    height: 250px;
+    background: rgba(0, 140, 255, 0.25);
+    top: 10%;
+    left: 10%;
+}
+
+.hero-section::after {
+    width: 300px;
+    height: 300px;
+    background: rgba(150, 50, 255, 0.2);
+    right: 5%;
+    bottom: 0;
+}
+
+@keyframes floatingLight {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-35px);
+    }
+}
+
+
+/* Hero text */
+
+.hero-content {
+    position: relative;
+    z-index: 5;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.hero-title {
+    font-size: clamp(42px, 6vw, 75px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+}
+
+.hero-title span {
+    background: linear-gradient(90deg, #ffffff, #7ea8ff, #c28cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+    color: #b8c0d9;
+    font-size: 18px;
+    max-width: 520px;
+    line-height: 1.7;
+}
+
+.hero-btn {
+    padding: 13px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.hero-btn:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ================================
+   3D SMARTPHONE
+================================ */
+
+.phone-area {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+}
+
+.phone {
+    width: 245px;
+    height: 470px;
+    border-radius: 40px;
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #222,
+            #090909 45%,
+            #333
+        );
+
+    border: 4px solid #555;
+
+    box-shadow:
+        0 0 0 2px #111,
+        0 30px 80px rgba(0,0,0,0.7),
+        0 0 70px rgba(75,130,255,0.35);
+
+    transform-style: preserve-3d;
+
+    animation:
+        phoneFloat 5s ease-in-out infinite,
+        phoneRotate 8s ease-in-out infinite;
+
+}
+
+/* Phone screen */
+
+.phone-screen {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+
+    border-radius: 32px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            #4375ff,
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 70% 80%,
+            #9b42ff,
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #08122e,
+            #101b45
+        );
+
+    border: 2px solid #111;
+
+}
+
+
+/* Phone internal components */
+
+.phone-chip {
+    position: absolute;
+    width: 70px;
+    height: 55px;
+    background: linear-gradient(145deg,#555,#111);
+    border: 1px solid #777;
+    border-radius: 10px;
+
+    top: 80px;
+    left: 30px;
+
+    box-shadow: 0 0 20px rgba(100,150,255,0.4);
+
+    animation: chipGlow 3s infinite alternate;
+}
+
+.phone-chip::before {
+    content: "CPU";
+    position: absolute;
+    color: #aaa;
+    font-size: 10px;
+    top: 20px;
+    left: 23px;
+}
+
+.phone-board {
+    position: absolute;
+    width: 110px;
+    height: 130px;
+    background: #142b22;
+    border: 1px solid #4b8a68;
+    border-radius: 8px;
+
+    right: 20px;
+    top: 180px;
+
+    transform: rotate(-8deg);
+
+    box-shadow: 0 0 20px rgba(40,200,120,0.2);
+}
+
+.phone-board::before,
+.phone-board::after {
+    content: "";
+    position: absolute;
+    width: 75%;
+    height: 2px;
+    background: #67c995;
+    left: 12%;
+}
+
+.phone-board::before {
+    top: 35px;
+}
+
+.phone-board::after {
+    top: 70px;
+}
+
+.camera {
+    position: absolute;
+    width: 65px;
+    height: 65px;
+
+    top: 35px;
+    right: 25px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(circle,#111 30%,#555 32%,#222 55%);
+
+    box-shadow:
+        0 0 0 5px #111,
+        0 0 20px rgba(80,120,255,0.4);
+}
+
+.battery {
+    position: absolute;
+    width: 55px;
+    height: 90px;
+
+    left: 35px;
+    bottom: 100px;
+
+    border: 2px solid #aaa;
+    border-radius: 8px;
+
+    background: linear-gradient(
+        to top,
+        #39d98a 65%,
+        #111 65%
+    );
+}
+
+.circuit-line {
+    position: absolute;
+    width: 90px;
+    height: 2px;
+    background: #3f80ff;
+    left: 65px;
+    top: 300px;
+    transform: rotate(20deg);
+
+    box-shadow: 0 0 10px #3f80ff;
+}
+
+
+/* Phone animations */
+
+@keyframes phoneFloat {
+
+    0%,100% {
+        transform: translateY(0) rotateY(-15deg) rotateX(5deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotateY(15deg) rotateX(-3deg);
+    }
+
+}
+
+@keyframes phoneRotate {
+
+    0%,100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.2);
+    }
+
+}
+
+@keyframes chipGlow {
+
+    from {
+        box-shadow: 0 0 10px rgba(80,120,255,0.2);
+    }
+
+    to {
+        box-shadow: 0 0 25px rgba(80,120,255,0.7);
+    }
+
+}
+/* ================================
+   PRODUCT SECTION
+================================ */
+
+.products-section {
+    padding: 90px 0;
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(50, 90, 180, 0.12),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050816,
+            #0b1026 50%,
+            #111936
+        );
+}
+
+.section-title {
+    font-weight: 800;
+    font-size: 38px;
+    color: white;
+}
+
+.section-subtitle {
+    color: #aeb8d0;
+}
+
+
+/* ================================
+   PREMIUM DARK PRODUCT CARDS
+================================ */
+
+.product-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111a35,
+            #080d20
+        );
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.35);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        border-color 0.4s ease;
+
+    height: 100%;
+
+    /* IMPORTANT */
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+
+    transform: translateY(-10px);
+
+    border-color: rgba(85, 124, 255, 0.5);
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.55),
+        0 0 30px rgba(70, 110, 255, 0.12);
+}
+
+
+/* ================================
+   PRODUCT IMAGE
+================================ */
+
+.product-image {
+    height: 230px;
+
+    width: 100%;
+
+    object-fit: contain;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(70, 110, 255, 0.12),
+            transparent 65%
+        );
+
+    transition:
+        transform 0.5s ease,
+        filter 0.5s ease;
+}
+
+.product-card:hover .product-image {
+
+    transform: scale(1.08);
+
+    filter:
+        drop-shadow(
+            0 15px 25px rgba(70, 110, 255, 0.3)
+        );
+}
+
+
+/* ================================
+   CARD BODY
+================================ */
+
+.product-card .card-body {
+
+    min-height: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* Product name */
+
+.product-name {
+
+    font-weight: 700;
+
+    color: white;
+
+    font-size: 18px;
+
+    margin-bottom: 10px;
+
+    min-height: 25px;
+}
+
+
+/* Description */
+
+.product-card .text-muted {
+
+    color: #9da8c2 !important;
+
+    line-height: 1.6;
+
+    min-height: 48px;
+}
+
+
+/* ================================
+   PRICE
+================================ */
+
+.product-price {
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    color: #6f95ff !important;
+}
+
+
+/* ================================
+   VIEW PRODUCT BUTTON
+================================ */
+
+.view-btn {
+
+    border: none;
+
+    border-radius: 50px;
+
+    padding: 12px 20px;
+
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f7cff,
+            #8b55ff
+        );
+
+    color: white;
+
+    width: 100%;
+
+    min-height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.view-btn:hover {
+
+    color: white;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(79, 124, 255, 0.35);
+}
+
+
+/* ================================
+   NO IMAGE
+================================ */
+
+.product-card .bg-light {
+
+    background:
+        linear-gradient(
+            145deg,
+            #111a35,
+            #080d20
+        ) !important;
+
+    color: #8e9ab5 !important;
+}
+
+
+/* ================================
+   EMPTY PRODUCTS
+================================ */
+
+.products-section .alert-info {
+
+    background: #111a35;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    color: #b8c3dc;
+
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+    .products-section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .product-card .card-body {
+        min-height: 210px;
+    }
+
+}
+
+</style>
+
+
+<!-- ======================================
+     HERO SECTION
+====================================== -->
+
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <!-- Hero Text -->
+
+            <div class="col-lg-6 hero-content">
+
+                <div class="hero-badge">
+                     Premium Technology Store
+                </div>
+
+                <h1 class="hero-title">
+                    Technology
+                    <br>
+                    <span>Built for You.</span>
+                </h1>
+
+                <p class="hero-description mt-4">
+                    Discover premium technology, powerful devices,
+                    and smart products designed for the modern lifestyle.
+                </p>
+
+                <div class="mt-4">
+
+                    <a href="#products"
+                       class="btn btn-light hero-btn me-2">
+                        Explore Products
+                    </a>
+
+                    <a href="#products"
+                       class="btn btn-outline-light hero-btn">
+                        Shop Now →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- 3D Phone -->
+
+            <div class="col-lg-6">
+
+                <div class="phone-area">
+
+                    <div class="phone">
+
+                        <div class="phone-screen">
+
+                            <!-- Camera -->
+                            <div class="camera"></div>
+
+                            <!-- CPU -->
+                            <div class="phone-chip"></div>
+
+                            <!-- Motherboard -->
+                            <div class="phone-board"></div>
+
+                            <!-- Battery -->
+                            <div class="battery"></div>
+
+                            <!-- Circuit -->
+                            <div class="circuit-line"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================
+     PRODUCTS
+====================================== -->
+
+<section class="products-section" id="products">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <span class="text-primary fw-bold">
+                OUR COLLECTION
+            </span>
+
+            <h2 class="section-title mt-2">
+                Explore Our Products
+            </h2>
+
+            <p class="section-subtitle">
+                Premium products selected for you.
+            </p>
+
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
+            {% for product in products %}
+
+            <div class="col">
+
+                <div class="product-card">
+
+                    <!-- Product Image -->
+
+                    {% if product.image %}
+
+                    <img
+                        src="{{ product.image.url }}"
+                        class="card-img-top product-image"
+                        alt="{{ product.name }}"
+                    >
+
+                    {% else %}
+
+                    <div
+                        class="d-flex justify-content-center align-items-center bg-light"
+                        style="height:230px;"
+                    >
+                        <span class="text-muted">
+                            No Image
+                        </span>
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Product Content -->
+
+                    <div class="card-body d-flex flex-column p-4">
+
+                        <h5 class="product-name">
+                            {{ product.name }}
+                        </h5>
+
+                        <p class="text-muted small">
+                            {{ product.description|truncatechars:70 }}
+                        </p>
+
+                        <div class="mt-auto">
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                <span class="product-price text-primary">
+                                    ₹{{ product.price }}
+                                </span>
+
+                            </div>
+
+                            <a
+                                href="{% url 'product_detail' product.id %}"
+                                class="btn btn-primary w-100 view-btn"
+                            >
+                                View Product →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="col-12">
+
+                <div class="alert alert-info text-center">
+                    No products available.
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
